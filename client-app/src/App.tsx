@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import 'semantic-ui-css/semantic.min.css';
 import { Header, List } from 'semantic-ui-react';
+
 function App() {
 	const [activities, setActivities] = useState([]);
 
