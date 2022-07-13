@@ -8,7 +8,7 @@ public class Edit
 {
     public class Command : IRequest
     {
-        public Activity Activity { get; set; }
+        public Activity? Activity { get; set; }
     }
 
     public class Handler : IRequestHandler<Command>
