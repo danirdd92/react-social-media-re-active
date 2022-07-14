@@ -1,15 +1,19 @@
 import { observer } from 'mobx-react-lite';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import { Button, Form, Segment } from 'semantic-ui-react';
+import Loader from '../../../app/layout/Loader';
 import { Activity } from '../../../app/models/activity';
 import { useStore } from '../../../app/stores/store';
+import { v4 as uuid } from 'uuid';
 
 const ActivityForm = () => {
 	const { activityStore } = useStore();
-	const { selectedActivity, closeForm, createActivity, updateActivity, loading } =
+	const { createActivity, updateActivity, loading, loadingInitial, loadActivity } =
 		activityStore;
-
-	const initialState = selectedActivity ?? {
+	const { id } = useParams<{ id: string }>();
+	const history = useHistory();
+	const [activity, setActivity] = useState<Activity>({
 		id: '',
 		title: '',
 		category: '',
@@ -17,8 +21,18 @@ const ActivityForm = () => {
 		date: '',
 		city: '',
 		venue: '',
-	};
-	const [activity, setActivity] = useState<Activity>(initialState);
+	});
+
+	useEffect(() => {
+		const getActivity = async () => {
+			if (id) {
+				const _activity = await loadActivity(id);
+				if (_activity) setActivity(_activity);
+			}
+		};
+
+		getActivity();
+	}, [id, loadActivity]);
 
 	const onInputChanged = (
 		event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -28,8 +42,22 @@ const ActivityForm = () => {
 	};
 
 	const handleSubmit = () => {
-		activity.id ? updateActivity(activity) : createActivity(activity);
+		if (activity.id.length === 0) {
+			const newActivity = {
+				...activity,
+				id: uuid(),
+			};
+			createActivity(newActivity).then(() =>
+				history.push(`/activities/${newActivity.id}`)
+			);
+		} else {
+			updateActivity(activity).then(() =>
+				history.push(`/activities/${activity.id}`)
+			);
+		}
 	};
+
+	if (loadingInitial) return <Loader content='Loading content...' />;
 
 	return (
 		<Segment clearing>
@@ -77,10 +105,15 @@ const ActivityForm = () => {
 					positive
 					type='submit'
 					content='Submit'
-					value={activity.title}
 					name='title'
 				/>
-				<Button onClick={closeForm} floated='right' type='button' content='Cancel' />
+				<Button
+					as={Link}
+					to='/activities'
+					floated='right'
+					type='button'
+					content='Cancel'
+				/>
 			</Form>
 		</Segment>
 	);

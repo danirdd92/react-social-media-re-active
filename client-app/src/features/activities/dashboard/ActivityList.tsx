@@ -1,4 +1,5 @@
 import { SyntheticEvent, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Button, Item, Label, Segment } from 'semantic-ui-react';
 import { useStore } from '../../../app/stores/store';
 
@@ -33,7 +34,8 @@ const ActivityList = () => {
 
 								<Item.Extra>
 									<Button
-										onClick={() => selectActivity(a.id)}
+										as={Link}
+										to={`/activities/${a.id}`}
 										floated='right'
 										content='View'
 										color='blue'
