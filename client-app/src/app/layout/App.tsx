@@ -15,7 +15,7 @@ function App() {
 		<>
 			<Route exact path='/' component={HomePage} />
 			<Route
-				path={`\(.+)`}
+				path={'/(.+)'}
 				render={() => (
 					<>
 						<NavBar />
