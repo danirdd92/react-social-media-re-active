@@ -4,10 +4,11 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Presistence;
 using Application.Core;
+using API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllersWithFluentValidation();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.ConfigureSqlContext(builder.Configuration);
@@ -33,6 +34,8 @@ catch (Exception ex)
     logger.LogError(ex.Message);
 }
 #endregion
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {

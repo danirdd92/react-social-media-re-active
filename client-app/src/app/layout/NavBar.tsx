@@ -3,8 +3,6 @@ import { Button, Container, Menu } from 'semantic-ui-react';
 import { useStore } from '../stores/store';
 
 const NavBar = () => {
-	const { activityStore } = useStore();
-	const { openForm } = activityStore;
 	return (
 		<Menu inverted fixed='top'>
 			<Container>
@@ -21,6 +19,10 @@ const NavBar = () => {
 				<Menu.Item as={NavLink} to='/activities'>
 					Activities
 				</Menu.Item>
+				<Menu.Item as={NavLink} to='/errors'>
+					Errors
+				</Menu.Item>
+
 				<Menu.Item>
 					<Button
 						as={NavLink}

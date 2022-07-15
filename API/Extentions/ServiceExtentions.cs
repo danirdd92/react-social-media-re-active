@@ -1,10 +1,17 @@
 
 using Microsoft.EntityFrameworkCore;
+using FluentValidation.AspNetCore;
 using Presistence;
+using Application.Activities;
 
 namespace API.Extentions;
 public static class ServiceExtentions
 {
+    public static void AddControllersWithFluentValidation(this IServiceCollection services) => services.AddControllers().AddFluentValidation(config =>
+{
+    config.RegisterValidatorsFromAssemblyContaining<Create>();
+});
+
     public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration) =>
         services.AddDbContext<DataContext>(opts => opts.UseSqlite(configuration.GetConnectionString("DefaultConnection")));
 

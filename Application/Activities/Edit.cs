@@ -1,17 +1,27 @@
+using Application.Core;
 using AutoMapper;
 using Domain;
+using FluentValidation;
 using MediatR;
 using Presistence;
 
 namespace Application.Activities;
 public class Edit
 {
-    public class Command : IRequest
+    public class Command : IRequest<Result<Unit>>
     {
-        public Activity? Activity { get; set; }
+        public Activity Activity { get; set; }
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class CommandValidator : AbstractValidator<Command>
+    {
+        public CommandValidator()
+        {
+            RuleFor(x => x.Activity).SetValidator(new ActivityValidator());
+        }
+    }
+
+    public class Handler : IRequestHandler<Command, Result<Unit>>
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
@@ -22,16 +32,18 @@ public class Edit
             _mapper = mapper;
         }
 
-        public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            var activityFromDb = await _context.Activities.FindAsync(request.Activity.Id);
+            var activity = await _context.Activities.FindAsync(request.Activity.Id);
 
-            if (activityFromDb is null) throw new NullReferenceException();
+            if (activity is null) return null;
 
-            _mapper.Map(request.Activity, activityFromDb);
-            await _context.SaveChangesAsync();
+            _mapper.Map(request.Activity, activity);
+            var result = await _context.SaveChangesAsync() > 0;
 
-            return Unit.Value;
+            if (!result) return Result<Unit>.Failure("Failed to update activity.");
+
+            return Result<Unit>.Success(Unit.Value);
         }
     }
 }
