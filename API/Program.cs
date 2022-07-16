@@ -5,16 +5,19 @@ using Microsoft.EntityFrameworkCore;
 using Presistence;
 using Application.Core;
 using API.Middleware;
+using Microsoft.AspNetCore.Identity;
+using Domain;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllersWithFluentValidation();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.ConfigureCors();
-builder.Services.AddMediatR(typeof(List.Handler).Assembly);
+builder.Services.AddControllersWithFluentValidation();
+builder.Services.ConfigureSqlContext(builder.Configuration);
+builder.Services.ConfigureIdentityServices(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+builder.Services.AddMediatR(typeof(List.Handler).Assembly);
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -25,8 +28,9 @@ var services = scope.ServiceProvider;
 try
 {
     var context = services.GetRequiredService<DataContext>();
+    var userManager = services.GetRequiredService<UserManager<AppUser>>();
     await context.Database.MigrateAsync();
-    await Seed.SeedData(context);
+    await Seed.SeedData(context, userManager);
 }
 catch (Exception ex)
 {
@@ -44,6 +48,7 @@ if (app.Environment.IsDevelopment())
 }
 app.UseCors("CorsPolicy");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
