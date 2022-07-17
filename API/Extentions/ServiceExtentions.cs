@@ -1,7 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using FluentValidation.AspNetCore;
-using Presistence;
+using Persistence;
 using Application.Activities;
 using Domain;
 using Microsoft.AspNetCore.Identity;
@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Infrastructure.Security;
 
 namespace API.Extentions;
 public static class ServiceExtentions
@@ -61,7 +62,14 @@ public static class ServiceExtentions
                 ValidateAudience = false
             };
         });
-
+        services.AddAuthorization(opts =>
+        {
+            opts.AddPolicy("IsActivityHost", policy =>
+            {
+                policy.Requirements.Add(new IsHostRequirment());
+            });
+        });
+        services.AddTransient<IAuthorizationHandler, IsHostRequirmentHandler>();
         services.AddScoped<TokenService>();
     }
 }

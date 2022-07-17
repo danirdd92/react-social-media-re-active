@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Presistence.Migrations
+namespace Persistence.Migrations
 {
     public partial class removeRequiredBio : Migration
     {

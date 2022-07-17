@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Application.Core;
 using MediatR;
-using Presistence;
+using Persistence;
 
 namespace Application.Activities
 {

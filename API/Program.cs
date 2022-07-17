@@ -2,11 +2,13 @@ using API.Extentions;
 using Application.Activities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Presistence;
+using Persistence;
 using Application.Core;
 using API.Middleware;
 using Microsoft.AspNetCore.Identity;
 using Domain;
+using Application.Contracts;
+using Infrastructure.Security;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,8 @@ builder.Services.ConfigureIdentityServices(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 builder.Services.AddMediatR(typeof(List.Handler).Assembly);
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IUserAccessor, UserAccessor>();
 
 var app = builder.Build();
 
