@@ -14,7 +14,8 @@ const ActivityDashboard = () => {
 		if (activityRegistry.size <= 1) loadActivities();
 	}, [activityStore]);
 
-	if (activityStore.loadingInitial) return <Loader content='Loading app....' />;
+	if (activityStore.loadingInitial)
+		return <Loader content='Loading activities....' />;
 
 	return (
 		<Grid>

@@ -6,6 +6,7 @@ import { Activity } from '../models/activity';
 type ActivityMap = {
 	[key: string]: Activity[];
 };
+
 export default class ActivityStore {
 	activityRegistry = new Map<string, Activity>();
 	selectedActivity: Activity | undefined = undefined;
