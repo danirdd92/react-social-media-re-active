@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Domain;
 using Application.Contracts;
 using Infrastructure.Security;
+using Infrastructure.Photos;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,8 +21,10 @@ builder.Services.ConfigureIdentityServices(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 builder.Services.AddMediatR(typeof(List.Handler).Assembly);
 builder.Services.AddSwaggerGen();
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("Cloudinary"));
 
 builder.Services.AddScoped<IUserAccessor, UserAccessor>();
+builder.Services.AddScoped<IPhotoAccessor, PhotoAccessor>();
 
 var app = builder.Build();
 

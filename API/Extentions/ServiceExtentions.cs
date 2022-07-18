@@ -72,4 +72,6 @@ public static class ServiceExtentions
         services.AddTransient<IAuthorizationHandler, IsHostRequirmentHandler>();
         services.AddScoped<TokenService>();
     }
+
+
 }
