@@ -103,6 +103,7 @@ const profiles = {
 	},
 	setMainPhoto: (photoId: string) => requests.post(`/photos/${photoId}`, {}),
 	deletePhoto: (photoId: string) => requests.remove(`/photos/${photoId}`),
+	updateProfile: (profile: Partial<Profile>) => requests.put(`/profiles`, profile),
 };
 
 const agent = {

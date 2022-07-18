@@ -4,10 +4,12 @@ import { Form, Label } from 'semantic-ui-react';
 interface Props {
 	placeholder: string;
 	name: string;
+	rows: number;
 	label?: string;
 }
 const FormTextArea = (props: Props) => {
 	const [field, meta] = useField(props.name);
+
 	return (
 		<Form.Field error={meta.touched && !!meta.error}>
 			<label>{props?.label}</label>
