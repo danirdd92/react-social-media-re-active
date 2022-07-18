@@ -1,13 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { Link, NavLink } from 'react-router-dom';
-import {
-	Button,
-	Container,
-	Dropdown,
-	Image,
-	Menu,
-	MenuItem,
-} from 'semantic-ui-react';
+import { Button, Container, Dropdown, Image, Menu, MenuItem } from 'semantic-ui-react';
 import { useStore } from '../stores/store';
 
 const NavBar = () => {
@@ -19,7 +12,7 @@ const NavBar = () => {
 			<Container>
 				<Menu.Item as={NavLink} to='/' exact header>
 					<img
-						src='images/logo.png'
+						src='/images/logo.png'
 						alt='logo'
 						style={{
 							marginRight: '1.25rem',
@@ -35,23 +28,13 @@ const NavBar = () => {
 				</Menu.Item>
 
 				<Menu.Item>
-					<Button
-						as={NavLink}
-						to='/createActivity'
-						positive
-						content='Create Activity'
-					/>
+					<Button as={NavLink} to='/createActivity' positive content='Create Activity' />
 				</Menu.Item>
 				<Menu.Item position='right'>
 					<Image src={user?.image || '/images/user.png'} avatar spaced='right' />
 					<Dropdown pointing='top left' text={user?.displayName}>
 						<Dropdown.Menu>
-							<Dropdown.Item
-								as={Link}
-								to={`/profile/${user?.username}`}
-								text='My Profile'
-								icon='user'
-							/>
+							<Dropdown.Item as={Link} to={`/profiles/${user?.userName}`} text='My Profile' icon='user' />
 
 							<Dropdown.Item onClick={logout} text='Logout' icon='power' />
 						</Dropdown.Menu>

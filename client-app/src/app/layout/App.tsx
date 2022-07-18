@@ -16,6 +16,7 @@ import { useStore } from '../stores/store';
 import { useEffect } from 'react';
 import Loader from './Loader';
 import ModalContainer from '../common/modals/ModalContainer';
+import ProfilePage from '../../features/profiles/ProfilePage';
 
 function App() {
 	const { key } = useLocation();
@@ -45,11 +46,8 @@ function App() {
 							<Switch>
 								<Route exact path='/activities' component={ActivityDashboard} />
 								<Route path='/activities/:id' component={ActivityDetails} />
-								<Route
-									key={key}
-									path={['/createActivity', '/manage/:id']}
-									component={ActivityForm}
-								/>
+								<Route key={key} path={['/createActivity', '/manage/:id']} component={ActivityForm} />
+								<Route path='/profiles/:userName' component={ProfilePage} />
 								<Route path='/errors' component={TestError} />
 								<Route path='/server-error' component={ServerError} />
 								<Route path='/login' component={LoginForm} />
