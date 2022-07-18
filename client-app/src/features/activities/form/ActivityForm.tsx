@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { Button, Header, Segment } from 'semantic-ui-react';
 import Loader from '../../../app/layout/Loader';
-import { Activity } from '../../../app/models/activity';
+import { ActivityFormValues } from '../../../app/models/activity';
 import { useStore } from '../../../app/stores/store';
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
@@ -25,51 +25,33 @@ const validationSchema = yup.object({
 
 const ActivityForm = () => {
 	const {
-		activityStore: {
-			createActivity,
-			updateActivity,
-			loading,
-			loadingInitial,
-			loadActivity,
-		},
+		activityStore: { createActivity, updateActivity, loading, loadingInitial, loadActivity },
 	} = useStore();
 
 	const { id } = useParams<{ id: string }>();
 	const history = useHistory();
-	const [activity, setActivity] = useState<Activity>({
-		id: '',
-		title: '',
-		category: '',
-		description: '',
-		date: null,
-		city: '',
-		venue: '',
-	});
+	const [activity, setActivity] = useState<ActivityFormValues>(new ActivityFormValues());
 
 	useEffect(() => {
 		const getActivity = async () => {
 			if (id) {
 				const _activity = await loadActivity(id);
-				if (_activity) setActivity(_activity);
+				if (_activity) setActivity(new ActivityFormValues(_activity));
 			}
 		};
 
 		getActivity();
 	}, [id, loadActivity]);
 
-	const handleFormSubmit = (activity: Activity) => {
-		if (activity.id.length === 0) {
+	const handleFormSubmit = (activity: ActivityFormValues) => {
+		if (!activity.id) {
 			const newActivity = {
 				...activity,
 				id: uuid(),
 			};
-			createActivity(newActivity).then(() =>
-				history.push(`/activities/${newActivity.id}`)
-			);
+			createActivity(newActivity).then(() => history.push(`/activities/${newActivity.id}`));
 		} else {
-			updateActivity(activity).then(() =>
-				history.push(`/activities/${activity.id}`)
-			);
+			updateActivity(activity).then(() => history.push(`/activities/${activity.id}`));
 		}
 	};
 
@@ -87,11 +69,7 @@ const ActivityForm = () => {
 					<Form className='ui form' autoComplete='off' onSubmit={handleSubmit}>
 						<FormInput placeholder='Title' name='title' />
 						<FormTextArea placeholder='Description' name='description' />
-						<FormSelectInput
-							options={categoryOptions}
-							placeholder='Category'
-							name='category'
-						/>
+						<FormSelectInput options={categoryOptions} placeholder='Category' name='category' />
 						<FormDatePicker
 							placeholderText='Date'
 							name='date'
@@ -105,20 +83,14 @@ const ActivityForm = () => {
 						<FormInput placeholder='Venue' name='venue' />
 						<Button
 							disabled={isSubmitting || !dirty || !isValid}
-							loading={loading}
+							loading={isSubmitting}
 							floated='right'
 							positive
 							type='submit'
 							content='Submit'
 							name='title'
 						/>
-						<Button
-							as={Link}
-							to='/activities'
-							floated='right'
-							type='button'
-							content='Cancel'
-						/>
+						<Button as={Link} to='/activities' floated='right' type='button' content='Cancel' />
 					</Form>
 				)}
 			</Formik>

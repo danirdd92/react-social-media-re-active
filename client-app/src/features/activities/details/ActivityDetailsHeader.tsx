@@ -1,34 +1,42 @@
 import { format } from 'date-fns';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
-import { Button, Header, Item, Segment, Image } from 'semantic-ui-react';
+import { Button, Header, Item, Segment, Image, Label } from 'semantic-ui-react';
 import { Activity } from '../../../app/models/activity';
+import { useStore } from '../../../app/stores/store';
 
 interface Props {
 	activity: Activity;
 }
 
 const ActivityDetailsHeader = ({ activity }: Props) => {
+	const {
+		activityStore: { updateAttendance, loading, cancelActivityToggle },
+	} = useStore();
+
 	return (
 		<Segment.Group>
 			<Segment basic attached='top' style={{ padding: '0' }}>
-				<Image
-					src={`/images/categoryImages/${activity.category}.jpg`}
-					fluid
-					style={activityImageStyle}
-				/>
+				{activity.isCancelled && (
+					<Label
+						style={{ position: 'absolute', zIndex: 1000, left: -14, top: 20 }}
+						ribbon
+						color='red'
+						content='Cancelled'
+					/>
+				)}
+				<Image src={`/images/categoryImages/${activity.category}.jpg`} fluid style={activityImageStyle} />
 				<Segment style={activityImageTextStyle} basic>
 					<Item.Group>
 						<Item>
 							<Item.Content>
-								<Header
-									size='huge'
-									content={activity.title}
-									style={{ color: 'white' }}
-								/>
+								<Header size='huge' content={activity.title} style={{ color: 'white' }} />
 								<p>{format(activity.date!, 'dd MMM yyyy h:mm aa')}</p>
 								<p>
-									Hosted by <strong>Daniel</strong>
+									Hosted by{' '}
+									<strong>
+										<Link to={`/profiles/${activity.host?.userName}`}>{activity.host?.displayName}</Link>
+									</strong>
 								</p>
 							</Item.Content>
 						</Item>
@@ -36,15 +44,33 @@ const ActivityDetailsHeader = ({ activity }: Props) => {
 				</Segment>
 			</Segment>
 			<Segment clearing attached='bottom'>
-				<Button color='teal'>Join Activity</Button>
-				<Button>Cancel attendance</Button>
-				<Button
-					as={Link}
-					to={`/manage/${activity.id}`}
-					color='orange'
-					floated='right'>
-					Manage Event
-				</Button>
+				{activity.isHost ? (
+					<>
+						<Button
+							onClick={cancelActivityToggle}
+							color={activity.isCancelled ? 'green' : 'red'}
+							floated='left'
+							basic
+							content={activity.isCancelled ? 'Re-activate Activity' : 'Cancel Activity'}
+						/>
+						<Button
+							as={Link}
+							to={`/manage/${activity.id}`}
+							disabled={activity.isCancelled}
+							color='orange'
+							floated='right'>
+							Manage Event
+						</Button>
+					</>
+				) : activity.isGoing ? (
+					<Button loading={loading} onClick={updateAttendance}>
+						Cancel attendance
+					</Button>
+				) : (
+					<Button disabled={activity.isCancelled} loading={loading} onClick={updateAttendance} color='teal'>
+						Join Activity
+					</Button>
+				)}
 			</Segment>
 		</Segment.Group>
 	);

@@ -31,7 +31,7 @@ public class ActivitiesController : BaseApiController
         return HandleResult(result);
     }
 
-    [HttpPost("{id}")]
+    [HttpPost("{id}/attend")]
     public async Task<IActionResult> Attend(Guid id)
     {
         var result = await Mediator.Send(new UpdateAttendance.Command { Id = id });
