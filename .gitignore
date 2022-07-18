@@ -456,3 +456,5 @@ $RECYCLE.BIN/
 
 assets/**
 **/**.db
+
+**/appsettings.json
