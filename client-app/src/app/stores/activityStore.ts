@@ -188,4 +188,15 @@ export default class ActivityStore {
 		activity.date = new Date(activity.date!);
 		this.activityRegistry.set(activity.id, activity);
 	};
+
+	updateAttendeeFollowing = (userName: string) => {
+		this.activityRegistry.forEach((activity) => {
+			for (const attendee of activity.attendees) {
+				if (attendee.userName === userName) {
+					attendee.following ? attendee.followersCount-- : attendee.followersCount++;
+					attendee.following = !attendee.following;
+				}
+			}
+		});
+	};
 }

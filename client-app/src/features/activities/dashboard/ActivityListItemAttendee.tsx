@@ -17,7 +17,13 @@ const ActivityListItemAttendee = ({ attendees }: Props) => {
 					key={attendee.userName}
 					trigger={
 						<List.Item key={attendee.userName} as={Link} to={`/profiles/${attendee.userName}`}>
-							<Image size='mini' circular src={attendee.image || '/images/user.png'} />
+							<Image
+								size='mini'
+								circular
+								src={attendee.image || '/images/user.png'}
+								bordered
+								style={attendee.following ? followingStyle : null}
+							/>
 						</List.Item>
 					}>
 					<Popup.Content>
@@ -30,3 +36,8 @@ const ActivityListItemAttendee = ({ attendees }: Props) => {
 };
 
 export default observer(ActivityListItemAttendee);
+
+const followingStyle = {
+	borderColor: 'orange',
+	borderWidth: 2,
+};

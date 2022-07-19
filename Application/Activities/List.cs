@@ -1,3 +1,4 @@
+using Application.Contracts;
 using Application.Core;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -14,10 +15,12 @@ public class List
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
+        private readonly IUserAccessor _userAccessor;
 
-        public Handler(DataContext context, IMapper mapper)
+        public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor)
         {
             _mapper = mapper;
+            _userAccessor = userAccessor;
             _context = context;
         }
 
@@ -25,7 +28,7 @@ public class List
         {
             var activities = await _context.Activities
                 //AutoMapper.QueryableExtensions
-                .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider, new { currentUserName = _userAccessor.GetUserName() })
                 .ToListAsync(cancellationToken);
 
 

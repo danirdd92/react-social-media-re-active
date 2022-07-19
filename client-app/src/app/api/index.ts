@@ -10,6 +10,7 @@ type Obj = {
 	[key: string]: any;
 };
 
+export type Predicate = 'following' | 'followers';
 //simulate http request from far
 const sleep = (delay: number) => {
 	return new Promise((resolve) => {
@@ -104,6 +105,9 @@ const profiles = {
 	setMainPhoto: (photoId: string) => requests.post(`/photos/${photoId}`, {}),
 	deletePhoto: (photoId: string) => requests.remove(`/photos/${photoId}`),
 	updateProfile: (profile: Partial<Profile>) => requests.put(`/profiles`, profile),
+	updateFollowing: (userName: string) => requests.post(`/follow/${userName}`, {}),
+	listFollowings: (userName: string, predicate: Predicate) =>
+		requests.get<Profile[]>(`/follow/${userName}?predicate=${predicate}`),
 };
 
 const agent = {
