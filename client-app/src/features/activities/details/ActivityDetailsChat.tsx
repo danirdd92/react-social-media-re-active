@@ -1,51 +1,77 @@
+import { Formik, Form, Field, FieldProps } from 'formik';
 import { observer } from 'mobx-react-lite';
-import { Segment, Header, Comment, Form, Button } from 'semantic-ui-react';
+import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { Segment, Header, Comment, Button, Loader } from 'semantic-ui-react';
+import FormTextArea from '../../../app/common/form/FormTextArea';
+import { useStore } from '../../../app/stores/store';
+import * as yup from 'yup';
+import { formatDistanceToNow } from 'date-fns';
 
-const ActivityDetailsChat = () => {
+interface Props {
+	activityId: string;
+}
+
+const ActivityDetailsChat = ({ activityId }: Props) => {
+	const { commentStore } = useStore();
+	useEffect(() => {
+		if (activityId) {
+			commentStore.createHubConnection(activityId);
+		}
+
+		return () => commentStore.clearComments();
+	}, [commentStore, activityId]);
+
 	return (
 		<>
-			<Segment
-				textAlign='center'
-				attached='top'
-				inverted
-				color='teal'
-				style={{ border: 'none' }}>
+			<Segment textAlign='center' attached='top' inverted color='teal' style={{ border: 'none' }}>
 				<Header>Chat about this event</Header>
 			</Segment>
-			<Segment attached>
+			<Segment attached clearing>
+				<Formik
+					onSubmit={(values, { resetForm }) => commentStore.addComment(values).then(() => resetForm())}
+					initialValues={{ body: '' }}
+					validationSchema={validationSchema}>
+					{({ isValid, isSubmitting, handleSubmit }) => (
+						<Form className='ui form'>
+							<Field name='body'>
+								{(props: FieldProps) => (
+									<div style={{ position: 'relative' }}>
+										<Loader active={isSubmitting} />
+										<textarea
+											placeholder='Enter your comment (Enter to submit, SHIFT + Enter for new line)'
+											rows={2}
+											{...props.field}
+											onKeyPress={(e) => {
+												if (e.key === 'Enter' && e.shiftKey) return;
+
+												if (e.key === 'Enter' && !e.shiftKey) {
+													e.preventDefault();
+													isValid && handleSubmit();
+												}
+											}}
+										/>
+									</div>
+								)}
+							</Field>
+						</Form>
+					)}
+				</Formik>
 				<Comment.Group>
-					<Comment>
-						<Comment.Avatar src='/images/user.png' />
-						<Comment.Content>
-							<Comment.Author as='a'>Matt</Comment.Author>
-							<Comment.Metadata>
-								<div>Today at 5:42PM</div>
-							</Comment.Metadata>
-							<Comment.Text>How artistic!</Comment.Text>
-							<Comment.Actions>
-								<Comment.Action>Reply</Comment.Action>
-							</Comment.Actions>
-						</Comment.Content>
-					</Comment>
-
-					<Comment>
-						<Comment.Avatar src='/images/user.png' />
-						<Comment.Content>
-							<Comment.Author as='a'>Joe Henderson</Comment.Author>
-							<Comment.Metadata>
-								<div>5 days ago</div>
-							</Comment.Metadata>
-							<Comment.Text>Dude, this is awesome. Thanks so much</Comment.Text>
-							<Comment.Actions>
-								<Comment.Action>Reply</Comment.Action>
-							</Comment.Actions>
-						</Comment.Content>
-					</Comment>
-
-					<Form reply>
-						<Form.TextArea />
-						<Button content='Add Reply' labelPosition='left' icon='edit' primary />
-					</Form>
+					{commentStore.comments.map((comment) => (
+						<Comment key={comment.id}>
+							<Comment.Avatar src={comment.image || '/images/user.png'} />
+							<Comment.Content>
+								<Comment.Author as={Link} to={`/profiles/${comment.userName}`}>
+									{comment.displayName}
+								</Comment.Author>
+								<Comment.Metadata>
+									<div>{formatDistanceToNow(comment.createdAt)} ago</div>
+								</Comment.Metadata>
+								<Comment.Text style={{ whiteSpace: 'pre-wrap' }}>{comment.body}</Comment.Text>
+							</Comment.Content>
+						</Comment>
+					))}
 				</Comment.Group>
 			</Segment>
 		</>
@@ -53,3 +79,27 @@ const ActivityDetailsChat = () => {
 };
 
 export default observer(ActivityDetailsChat);
+
+const validationSchema = yup.object({
+	body: yup.string().required(),
+});
+
+const styles = {
+	field: {
+		position: 'relative',
+	},
+};
+
+{
+	/* <FormTextArea placeholder='Add comment' name='body' rows={2} />
+								<Button
+									loading={isSubmitting}
+									disabled={isSubmitting || !isValid}
+									content='Add Reply'
+									labelPosition='left'
+									icon='edit'
+									primary
+									type='submit'
+									floated='right'
+								/> */
+}

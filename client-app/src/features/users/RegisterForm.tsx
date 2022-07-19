@@ -13,27 +13,17 @@ const RegisterForm = () => {
 		<Formik
 			initialValues={intialValues}
 			validationSchema={registerSchema}
-			onSubmit={(values, { setErrors }) =>
-				userStore.register(values).catch((error) => setErrors({ error }))
-			}>
+			onSubmit={(values, { setErrors }) => userStore.register(values).catch((error) => setErrors({ error }))}>
 			{({ handleSubmit, isSubmitting, errors, isValid, dirty }) => (
 				<Form className='ui form error' onSubmit={handleSubmit} autocomplete='off'>
-					<Header
-						as='h2'
-						content='Sign up to Reactivities'
-						color='teal'
-						textAlign='center'
-					/>
+					<Header as='h2' content='Sign up to Re-Active' color='teal' textAlign='center' />
 
 					<FormInput name='displayName' placeholder='DisplayName' />
 					<FormInput name='userName' placeholder='Username' />
 					<FormInput name='email' placeholder='Email' />
 					<FormInput name='password' placeholder='Password' type='password' />
 
-					<ErrorMessage
-						name='error'
-						render={() => <ValidationsErrors errors={errors.error} />}
-					/>
+					<ErrorMessage name='error' render={() => <ValidationsErrors errors={errors.error} />} />
 
 					<Button
 						disabled={!isValid || !dirty || isSubmitting}

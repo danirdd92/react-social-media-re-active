@@ -37,7 +37,11 @@ public static class ServiceExtentions
           {
               opts.AddPolicy("CorsPolicy", policy =>
               {
-                  policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:3000");
+                  policy
+                  .AllowAnyMethod()
+                  .AllowAnyHeader()
+                  .AllowCredentials()
+                  .WithOrigins("http://localhost:3000");
               });
           });
 
@@ -60,6 +64,23 @@ public static class ServiceExtentions
                 IssuerSigningKey = key,
                 ValidateIssuer = false,
                 ValidateAudience = false
+            };
+
+            // token validation for SignalR
+            opts.Events = new JwtBearerEvents
+            {
+                OnMessageReceived = context =>
+                {
+                    var accessToken = context.Request.Query["access_token"];
+                    var path = context.HttpContext.Request.Path;
+
+                    if (!string.IsNullOrEmpty(accessToken) && (path.StartsWithSegments("/chat")))
+                    {
+                        context.Token = accessToken;
+                    }
+
+                    return Task.CompletedTask;
+                }
             };
         });
         services.AddAuthorization(opts =>

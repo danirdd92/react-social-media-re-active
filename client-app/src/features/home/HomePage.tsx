@@ -10,35 +10,24 @@ const HomePage = () => {
 	return (
 		<Segment inverted textAlign='center' vertical className='masthead'>
 			<Container text>
-				<Header as='h1' inverted>
-					<Image
-						size='massive'
-						src='/images/logo.png'
-						alt='logo'
-						style={{ marginBottom: 12 }}
-					/>
-					Reactivities
+				<Header as='h1' inverted style={{ marginRight: 20 }}>
+					<Image size='massive' src='/images/logo.png' alt='logo' style={{ marginBottom: 12 }} />
+					Re-Active
 				</Header>
 				{userStore.isLoggedIn ? (
 					<>
-						<Header as='h2' inverted content='Welcome to Reactivities' />
+						<Header as='h2' inverted content='Join our soical activities' />
 						<Button as={Link} to='/activities' size='huge' inverted>
 							Go to Activities
 						</Button>
 					</>
 				) : (
 					<>
-						<Button
-							onClick={() => modalStore.openModal(<LoginForm />)}
-							size='huge'
-							inverted>
+						<Button onClick={() => modalStore.openModal(<LoginForm />)} size='huge' inverted>
 							Login
 						</Button>
 
-						<Button
-							onClick={() => modalStore.openModal(<RegisterForm />)}
-							size='huge'
-							inverted>
+						<Button onClick={() => modalStore.openModal(<RegisterForm />)} size='huge' inverted>
 							Register
 						</Button>
 					</>

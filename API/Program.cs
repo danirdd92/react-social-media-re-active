@@ -10,6 +10,7 @@ using Domain;
 using Application.Contracts;
 using Infrastructure.Security;
 using Infrastructure.Photos;
+using API.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,7 @@ builder.Services.ConfigureIdentityServices(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 builder.Services.AddMediatR(typeof(List.Handler).Assembly);
 builder.Services.AddSwaggerGen();
+builder.Services.AddSignalR();
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("Cloudinary"));
 
 builder.Services.AddScoped<IUserAccessor, UserAccessor>();
@@ -46,6 +48,8 @@ catch (Exception ex)
 }
 #endregion
 
+app.UseRouting();
+
 app.UseMiddleware<ExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
@@ -58,6 +62,10 @@ app.UseCors("CorsPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+    endpoints.MapHub<ChatHub>("/chat");
+});
 
 app.Run();
