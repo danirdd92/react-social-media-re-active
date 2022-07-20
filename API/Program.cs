@@ -50,20 +50,36 @@ catch (Exception ex)
 }
 #endregion
 
-app.UseRouting();
-
-app.UseDefaultFiles();
-app.UseStaticFiles();
-
 app.UseMiddleware<ExceptionMiddleware>();
-
+app.UseXContentTypeOptions();
+app.UseReferrerPolicy(opts => opts.NoReferrer());
+app.UseXXssProtection(opts => opts.EnabledWithBlockMode());
+app.UseXfo(opts => opts.Deny());
+app.UseCsp(opts => opts.BlockAllMixedContent()
+                                 .StyleSources(s => s.Self().CustomSources("https://fonts.gstatic.com", "https://fonts.googleapis.com"))
+                                 .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com", "data:"))
+                                 .FormActions(s => s.Self())
+                                 .FrameAncestors(s => s.Self())
+                                 .ImageSources(s => s.Self().CustomSources("https://res.cloudinary.com"))
+                                 .ScriptSources(s => s.Self()));
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseCors("CorsPolicy");
+else
+{
+    app.Use(async (context, next) =>
+    {
+        context.Response.Headers.Add("Strict-Transport-Security", "max-age=31536000");
+        await next.Invoke();
+    });
+}
 
+app.UseRouting();
+app.UseDefaultFiles();
+app.UseStaticFiles();
+app.UseCors("CorsPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 
