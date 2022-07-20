@@ -30,6 +30,8 @@ builder.Services.AddScoped<IPhotoAccessor, PhotoAccessor>();
 
 var app = builder.Build();
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 #region DB Scaffold
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
@@ -50,6 +52,9 @@ catch (Exception ex)
 
 app.UseRouting();
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.UseMiddleware<ExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
@@ -66,6 +71,7 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
     endpoints.MapHub<ChatHub>("/chat");
+    endpoints.MapFallbackToController("Index", "Fallback");
 });
 
 app.Run();

@@ -30,7 +30,7 @@ public static class ServiceExtensions
         });
 
     public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration) =>
-        services.AddDbContext<DataContext>(opts => opts.UseSqlite(configuration.GetConnectionString("DefaultConnection")));
+        services.AddDbContext<DataContext>(opts => opts.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
     public static void ConfigureCors(this IServiceCollection services) =>
           services.AddCors(opts =>

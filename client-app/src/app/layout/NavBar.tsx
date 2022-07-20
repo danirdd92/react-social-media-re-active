@@ -18,7 +18,7 @@ const NavBar = () => {
 							marginRight: '1.25rem',
 						}}
 					/>
-					Re-Active
+					Re.Active
 				</Menu.Item>
 				<Menu.Item as={NavLink} to='/activities'>
 					Activities

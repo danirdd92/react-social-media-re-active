@@ -16,7 +16,7 @@ const RegisterForm = () => {
 			onSubmit={(values, { setErrors }) => userStore.register(values).catch((error) => setErrors({ error }))}>
 			{({ handleSubmit, isSubmitting, errors, isValid, dirty }) => (
 				<Form className='ui form error' onSubmit={handleSubmit} autocomplete='off'>
-					<Header as='h2' content='Sign up to Re-Active' color='teal' textAlign='center' />
+					<Header as='h2' content='Sign up to Re.Active' color='teal' textAlign='center' />
 
 					<FormInput name='displayName' placeholder='DisplayName' />
 					<FormInput name='userName' placeholder='Username' />

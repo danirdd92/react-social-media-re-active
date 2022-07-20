@@ -14,7 +14,7 @@ const LoginForm = () => {
 			}>
 			{({ handleSubmit, isSubmitting, errors }) => (
 				<Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
-					<Header as='h2' content='Login to Re-Active' color='teal' textAlign='center' />
+					<Header as='h2' content='Login to Re.Active' color='teal' textAlign='center' />
 
 					<FormInput name='email' placeholder='Email' />
 					<FormInput name='password' placeholder='Password' type='password' />

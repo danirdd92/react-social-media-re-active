@@ -4,37 +4,27 @@ import { useState } from 'react';
 import ValidationsErrors from './ValidationsErrors';
 
 const TestError = () => {
-	const baseUrl = 'http://localhost:5000/api/';
+	const baseUrl = import.meta.env.VITE_API_URL;
 	const [errors, setErrors] = useState(null);
 
 	function handleNotFound() {
-		axios
-			.get(baseUrl + 'errors/not-found')
-			.catch((err) => console.log(err.response));
+		axios.get(baseUrl + 'errors/not-found').catch((err) => console.log(err.response));
 	}
 
 	function handleBadRequest() {
-		axios
-			.get(baseUrl + 'errors/bad-request')
-			.catch((err) => console.log(err.response));
+		axios.get(baseUrl + 'errors/bad-request').catch((err) => console.log(err.response));
 	}
 
 	function handleServerError() {
-		axios
-			.get(baseUrl + 'errors/server-error')
-			.catch((err) => console.log(err.response));
+		axios.get(baseUrl + 'errors/server-error').catch((err) => console.log(err.response));
 	}
 
 	function handleUnauthorised() {
-		axios
-			.get(baseUrl + 'errors/unauthorised')
-			.catch((err) => console.log(err.response));
+		axios.get(baseUrl + 'errors/unauthorised').catch((err) => console.log(err.response));
 	}
 
 	function handleBadGuid() {
-		axios
-			.get(baseUrl + 'activities/notaguid')
-			.catch((err) => console.log(err.response));
+		axios.get(baseUrl + 'activities/notaguid').catch((err) => console.log(err.response));
 	}
 
 	function handleValidationError() {
@@ -48,19 +38,9 @@ const TestError = () => {
 				<Button.Group widths='7'>
 					<Button onClick={handleNotFound} content='Not Found' basic primary />
 					<Button onClick={handleBadRequest} content='Bad Request' basic primary />
-					<Button
-						onClick={handleValidationError}
-						content='Validation Error'
-						basic
-						primary
-					/>
+					<Button onClick={handleValidationError} content='Validation Error' basic primary />
 					<Button onClick={handleServerError} content='Server Error' basic primary />
-					<Button
-						onClick={handleUnauthorised}
-						content='Unauthorised'
-						basic
-						primary
-					/>
+					<Button onClick={handleUnauthorised} content='Unauthorised' basic primary />
 					<Button onClick={handleBadGuid} content='Bad Guid' basic primary />
 				</Button.Group>
 			</Segment>

@@ -5,6 +5,7 @@
 	"scripts": {
 		"dev": "vite",
 		"build": "tsc && vite build",
+		"postbuild": "mv dist ../API/wwwroot",
 		"preview": "vite preview"
 	},
 	"dependencies": {

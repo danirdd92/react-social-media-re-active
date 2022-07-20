@@ -83,7 +83,7 @@ export default class ActivityStore {
 			if (key === 'startDate') {
 				params.append(key, (value as Date).toISOString());
 			} else {
-				params.append(key, value);
+				params.append(key, value.toString());
 			}
 		});
 		return params;

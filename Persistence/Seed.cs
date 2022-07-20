@@ -13,21 +13,24 @@ public class Seed
                 {
                     new AppUser
                     {
-                        DisplayName = "Bob",
-                        UserName = "bob",
-                        Email = "bob@test.com"
+                        DisplayName = "Bruce Wayne",
+                        UserName = "theRealBatman",
+                        Bio = "I love to larp as a bat and fight crime, also very rich and single ;)",
+                        Email = "bruce@re.active.com"
                     },
                     new AppUser
                     {
-                        DisplayName = "Jane",
-                        UserName = "jane",
-                        Email = "jane@test.com"
+                        DisplayName = "Joker",
+                        UserName = "daJoke",
+                        Bio = "Notorious standup comedian, influencer, love\\hate relationship with bats",
+                        Email = "Joker@re.active.com"
                     },
                     new AppUser
                     {
-                        DisplayName = "Tom",
-                        UserName = "tom",
-                        Email = "tom@test.com"
+                        DisplayName = "Selina Kyle",
+                        UserName = "PawPawMewMew",
+                        Bio = "Cat person, alergic to dogs",
+                        Email = "catwoman@re.active.com"
                     },
                 };
 
@@ -40,12 +43,12 @@ public class Seed
                 {
                     new Activity
                     {
-                        Title = "Past Activity 1",
+                        Title = "Chillout Session",
                         Date = DateTime.Now.AddMonths(-2),
-                        Description = "Activity 2 months ago",
-                        Category = "drinks",
-                        City = "London",
-                        Venue = "Pub",
+                        Description = "Join me for a few hours of vibing to some good ol' Dark knight OST mix",
+                        Category = "music",
+                        City = "Gotham City",
+                        Venue = "The Bat Cave",
                         Attendees = new List<ActivityAttendee>
                         {
                             new ActivityAttendee
@@ -57,12 +60,12 @@ public class Seed
                     },
                     new Activity
                     {
-                        Title = "Past Activity 2",
+                        Title = "Live VLOG w/ Joker",
                         Date = DateTime.Now.AddMonths(-1),
-                        Description = "Activity 1 month ago",
+                        Description = "Live from Arkham, visiting my old friend",
                         Category = "culture",
-                        City = "Paris",
-                        Venue = "The Louvre",
+                        City = "Gotham City",
+                        Venue = "Arkham Asylum",
                         Attendees = new List<ActivityAttendee>
                         {
                             new ActivityAttendee
@@ -79,12 +82,12 @@ public class Seed
                     },
                     new Activity
                     {
-                        Title = "Future Activity 1",
+                        Title = "Nightout",
                         Date = DateTime.Now.AddMonths(1),
-                        Description = "Activity 1 month in future",
-                        Category = "music",
-                        City = "London",
-                        Venue = "Wembly Stadium",
+                        Description = "Tired of saying inside? Come get wasted with us :)",
+                        Category = "drinks",
+                        City = "Gotham City",
+                        Venue = "The IceBerg Lounge",
                         Attendees = new List<ActivityAttendee>
                         {
                             new ActivityAttendee

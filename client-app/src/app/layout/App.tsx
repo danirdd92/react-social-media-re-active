@@ -17,6 +17,7 @@ import { useEffect } from 'react';
 import Loader from './Loader';
 import ModalContainer from '../common/modals/ModalContainer';
 import ProfilePage from '../../features/profiles/ProfilePage';
+import PrivateRoute from './PrivateRoute';
 
 function App() {
 	const { key } = useLocation();
@@ -44,13 +45,12 @@ function App() {
 
 						<Container style={{ marginTop: '7em' }}>
 							<Switch>
-								<Route exact path='/activities' component={ActivityDashboard} />
-								<Route path='/activities/:id' component={ActivityDetails} />
-								<Route key={key} path={['/createActivity', '/manage/:id']} component={ActivityForm} />
-								<Route path='/profiles/:userName' component={ProfilePage} />
-								<Route path='/errors' component={TestError} />
+								<PrivateRoute exact path='/activities' component={ActivityDashboard} />
+								<PrivateRoute path='/activities/:id' component={ActivityDetails} />
+								<PrivateRoute key={key} path={['/createActivity', '/manage/:id']} component={ActivityForm} />
+								<PrivateRoute path='/profiles/:userName' component={ProfilePage} />
+								<PrivateRoute path='/errors' component={TestError} />
 								<Route path='/server-error' component={ServerError} />
-								<Route path='/login' component={LoginForm} />
 								<Route component={NotFound} />
 							</Switch>
 						</Container>
