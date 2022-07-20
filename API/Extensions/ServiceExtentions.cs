@@ -13,8 +13,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Infrastructure.Security;
 
-namespace API.Extentions;
-public static class ServiceExtentions
+namespace API.Extensions;
+public static class ServiceExtensions
 {
     public static void AddControllersWithFluentValidation(this IServiceCollection services) =>
     services.AddControllers(opts =>

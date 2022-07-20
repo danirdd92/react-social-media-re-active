@@ -2,6 +2,7 @@ using Application.Comments;
 using Application.Activities;
 using AutoMapper;
 using Domain;
+using P = Application.Profiles;
 
 namespace Application.Core;
 public class MappingProfile : Profile
@@ -29,7 +30,7 @@ public class MappingProfile : Profile
             .ForMember(d => d.Following,
                        o => o.MapFrom(s => s.AppUser.Followers.Any(x => x.Observer.UserName.Equals(currentUserName))));
 
-        CreateMap<AppUser, Profiles.Profile>()
+        CreateMap<AppUser, P.Profile>()
             .ForMember(d => d.Image,
                         o => o.MapFrom(s => s.Photos.FirstOrDefault(x => x.IsMain).Url))
             .ForMember(d => d.FollowersCount, o => o.MapFrom(s => s.Followers.Count))
@@ -42,5 +43,11 @@ public class MappingProfile : Profile
             .ForMember(d => d.Image,
                         o => o.MapFrom(s => s.Author.Photos.FirstOrDefault(x => x.IsMain).Url));
 
+        CreateMap<ActivityAttendee, P.UserActivityDto>()
+            .ForMember(d => d.Id, o => o.MapFrom(s => s.Activity.Id))
+            .ForMember(d => d.Date, o => o.MapFrom(s => s.Activity.Date))
+            .ForMember(d => d.Title, o => o.MapFrom(s => s.Activity.Title))
+            .ForMember(d => d.Category, o => o.MapFrom(s => s.Activity.Category))
+            .ForMember(d => d.HostUserName, o => o.MapFrom(s => s.Activity.Attendees.FirstOrDefault(x => x.IsHost).AppUser.UserName));
     }
 }

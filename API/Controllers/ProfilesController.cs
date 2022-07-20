@@ -11,6 +11,13 @@ public class ProfilesController : BaseApiController
         return HandleResult(result);
     }
 
+    [HttpGet("{userName}/activities")]
+    public async Task<IActionResult> GetUserActivities(string userName, string predicate)
+    {
+        var result = await Mediator.Send(new ListActivities.Query { UserName = userName, Predicate = predicate });
+        return HandleResult(result);
+    }
+
     [HttpPut]
     public async Task<IActionResult> Edit(Edit.Command command)
     {

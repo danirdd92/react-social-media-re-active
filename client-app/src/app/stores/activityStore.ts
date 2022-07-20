@@ -1,7 +1,8 @@
 import { format } from 'date-fns';
-import { makeAutoObservable, runInAction } from 'mobx';
+import { makeAutoObservable, reaction, runInAction } from 'mobx';
 import agent from '../api';
 import { Activity, ActivityFormValues } from '../models/activity';
+import { Pagination, PagingParams } from '../models/pagination';
 import { Profile } from '../models/profile';
 import { store } from './store';
 
@@ -9,15 +10,83 @@ type ActivityMap = {
 	[key: string]: Activity[];
 };
 
+type Predicate = 'all' | 'isGoing' | 'isHost' | 'startDate';
+
 export default class ActivityStore {
 	activityRegistry = new Map<string, Activity>();
 	selectedActivity: Activity | undefined = undefined;
 	editMode = false;
 	loading = false;
 	loadingInitial = false;
+	pagination: Pagination | null = null;
+	pagingParams = new PagingParams();
+	predicate = new Map<Predicate, boolean | Date>().set('all', true);
 
 	constructor() {
 		makeAutoObservable(this);
+
+		reaction(
+			() => this.predicate.keys(),
+			() => {
+				this.pagingParams = new PagingParams();
+				this.activityRegistry.clear();
+				this.loadActivities();
+			}
+		);
+	}
+
+	setPagingParams = (paginsParams: PagingParams) => {
+		this.pagingParams = paginsParams;
+	};
+
+	setPredicate = (predicate: Predicate, value: boolean | Date) => {
+		const resetPredicate = () => {
+			this.predicate.forEach((value, key) => {
+				if (key !== 'startDate') this.predicate.delete(key);
+			});
+		};
+
+		if (predicate === 'startDate') {
+			this.predicate.delete(predicate);
+			this.predicate.set(predicate, value);
+		} else {
+			resetPredicate();
+			this.predicate.set(predicate, true);
+		}
+
+		// switch (predicate) {
+		// 	case 'all':
+		// 		resetPredicate();
+		// 		this.predicate.set(predicate, true);
+		// 		break;
+		// 	case 'isGoing':
+		// 		resetPredicate();
+		// 		this.predicate.set(predicate, true);
+		// 		break;
+		// 	case 'isHost':
+		// 		this.predicate.set(predicate, true);
+		// 		break;
+
+		// 	case 'startDate':
+		// 		this.predicate.delete(predicate);
+		// 		this.predicate.set(predicate, value);
+		// 		break;
+		// }
+	};
+
+	get axiosParams() {
+		const params = new URLSearchParams();
+		params.append('pageNumber', this.pagingParams.pageNumber.toString());
+		params.append('pageSize', this.pagingParams.pageSize.toString());
+
+		this.predicate.forEach((value, key) => {
+			if (key === 'startDate') {
+				params.append(key, (value as Date).toISOString());
+			} else {
+				params.append(key, value);
+			}
+		});
+		return params;
 	}
 
 	get activitiesByDate() {
@@ -39,12 +108,12 @@ export default class ActivityStore {
 	loadActivities = async () => {
 		this.loadingInitial = true;
 		try {
-			const activities = await agent.activities.list();
+			const result = await agent.activities.list(this.axiosParams);
 
-			for (const activity of activities) {
+			for (const activity of result.data) {
 				this.setActivity(activity);
 			}
-
+			this.setPagination(result.pagination);
 			this.setLoadingInitial(false);
 		} catch (error) {
 			console.error(error);
@@ -174,6 +243,17 @@ export default class ActivityStore {
 		this.selectedActivity = undefined;
 	};
 
+	updateAttendeeFollowing = (userName: string) => {
+		this.activityRegistry.forEach((activity) => {
+			for (const attendee of activity.attendees) {
+				if (attendee.userName === userName) {
+					attendee.following ? attendee.followersCount-- : attendee.followersCount++;
+					attendee.following = !attendee.following;
+				}
+			}
+		});
+	};
+
 	private getActivity = (id: string) => {
 		return this.activityRegistry.get(id);
 	};
@@ -189,14 +269,7 @@ export default class ActivityStore {
 		this.activityRegistry.set(activity.id, activity);
 	};
 
-	updateAttendeeFollowing = (userName: string) => {
-		this.activityRegistry.forEach((activity) => {
-			for (const attendee of activity.attendees) {
-				if (attendee.userName === userName) {
-					attendee.following ? attendee.followersCount-- : attendee.followersCount++;
-					attendee.following = !attendee.following;
-				}
-			}
-		});
+	private setPagination = (pagination: Pagination) => {
+		this.pagination = pagination;
 	};
 }

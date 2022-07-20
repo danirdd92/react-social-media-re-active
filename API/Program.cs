@@ -1,4 +1,4 @@
-using API.Extentions;
+using API.Extensions;
 using Application.Activities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
