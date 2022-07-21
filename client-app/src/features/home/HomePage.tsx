@@ -11,7 +11,7 @@ const HomePage = () => {
 		<Segment inverted textAlign='center' vertical className='masthead'>
 			<Container text>
 				<Header as='h1' inverted style={{ marginRight: 20 }}>
-					<Image size='massive' src='/images/logo.png' alt='logo' style={{ marginBottom: 12 }} />
+					<Image size='massive' src='/assets/images/logo.png' alt='logo' style={{ marginBottom: 12 }} />
 					Re.Active
 				</Header>
 				{userStore.isLoggedIn ? (

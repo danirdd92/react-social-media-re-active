@@ -12,7 +12,7 @@ const NavBar = () => {
 			<Container>
 				<Menu.Item as={NavLink} to='/' exact header>
 					<img
-						src='/images/logo.png'
+						src='/assets/images/logo.png'
 						alt='logo'
 						style={{
 							marginRight: '1.25rem',
@@ -31,7 +31,7 @@ const NavBar = () => {
 					<Button as={NavLink} to='/createActivity' positive content='Create Activity' />
 				</Menu.Item>
 				<Menu.Item position='right'>
-					<Image src={user?.image || '/images/user.png'} avatar spaced='right' />
+					<Image src={user?.image || '/assets/images/user.png'} avatar spaced='right' />
 					<Dropdown pointing='top left' text={user?.displayName}>
 						<Dropdown.Menu>
 							<Dropdown.Item as={Link} to={`/profiles/${user?.userName}`} text='My Profile' icon='user' />

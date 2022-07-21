@@ -60,7 +60,7 @@ const ActivityDetailsChat = ({ activityId }: Props) => {
 				<Comment.Group>
 					{commentStore.comments.map((comment) => (
 						<Comment key={comment.id}>
-							<Comment.Avatar src={comment.image || '/images/user.png'} />
+							<Comment.Avatar src={comment.image || '/assets/images/user.png'} />
 							<Comment.Content>
 								<Comment.Author as={Link} to={`/profiles/${comment.userName}`}>
 									{comment.displayName}

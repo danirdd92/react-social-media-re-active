@@ -12,7 +12,7 @@ interface Props {
 const ProfileCard = ({ profile }: Props) => {
 	return (
 		<Card as={Link} to={`/profiles/${profile.userName}`}>
-			<Image src={profile.image || '/images/user.png'} />
+			<Image src={profile.image || '/assets/images/user.png'} />
 			<Card.Content>
 				<Card.Header>{profile.displayName}</Card.Header>
 				<Card.Description>{truncateString(profile.bio)}</Card.Description>

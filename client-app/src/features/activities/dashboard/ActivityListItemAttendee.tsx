@@ -20,7 +20,7 @@ const ActivityListItemAttendee = ({ attendees }: Props) => {
 							<Image
 								size='mini'
 								circular
-								src={attendee.image || '/images/user.png'}
+								src={attendee.image || '/assets/images/user.png'}
 								bordered
 								style={attendee.following ? followingStyle : null}
 							/>

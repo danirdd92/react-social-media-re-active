@@ -26,7 +26,7 @@ const ActivityDetailsSideBar = ({ activity: { attendees, host } }: Props) => {
 								</Label>
 							)}
 
-							<Image size='tiny' src={attendee.image || '/images/user.png'} />
+							<Image size='tiny' src={attendee.image || '/assets/images/user.png'} />
 							<Item.Content verticalAlign='middle'>
 								<Item.Header as='h3'>
 									<Link to={`/profiles/${attendee.userName}`}>{attendee.displayName}</Link>

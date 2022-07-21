@@ -34,6 +34,7 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 #region DB Scaffold
 using var scope = app.Services.CreateScope();
+
 var services = scope.ServiceProvider;
 
 try
@@ -76,10 +77,11 @@ else
     });
 }
 
-app.UseRouting();
 app.UseDefaultFiles();
 app.UseStaticFiles();
+
 app.UseCors("CorsPolicy");
+
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -90,4 +92,4 @@ app.UseEndpoints(endpoints =>
     endpoints.MapFallbackToController("Index", "Fallback");
 });
 
-app.Run();
+await app.RunAsync();

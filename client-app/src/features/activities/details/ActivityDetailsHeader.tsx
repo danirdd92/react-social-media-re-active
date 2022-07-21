@@ -25,7 +25,7 @@ const ActivityDetailsHeader = ({ activity }: Props) => {
 						content='Cancelled'
 					/>
 				)}
-				<Image src={`/images/categoryImages/${activity.category}.jpg`} fluid style={activityImageStyle} />
+				<Image src={`/assets/images/categoryImages/${activity.category}.jpg`} fluid style={activityImageStyle} />
 				<Segment style={activityImageTextStyle} basic>
 					<Item.Group>
 						<Item>

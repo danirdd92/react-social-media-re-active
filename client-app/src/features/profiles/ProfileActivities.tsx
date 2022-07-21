@@ -40,7 +40,7 @@ const ProfileActivities = () => {
 					<Card.Group itemsPerRow={4}>
 						{userActivities.map((activity) => (
 							<Card as={Link} to={`/activities/${activity.id}`} key={activity.id}>
-								<Image src={`/images/categoryImages/${activity.category}.jpg`} style={imageStyle} />
+								<Image src={`/assets/images/categoryImages/${activity.category}.jpg`} style={imageStyle} />
 								<Card.Content>
 									<Card.Header textAlign='center'>{activity.titile}</Card.Header>
 									<Card.Meta textAlign='center'>
