@@ -34,7 +34,6 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 #region DB Scaffold
 using var scope = app.Services.CreateScope();
-
 var services = scope.ServiceProvider;
 
 try
@@ -76,6 +75,8 @@ else
         await next.Invoke();
     });
 }
+
+app.UseRouting();
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
