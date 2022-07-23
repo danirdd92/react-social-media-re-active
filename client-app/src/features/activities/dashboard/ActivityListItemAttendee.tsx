@@ -2,6 +2,7 @@ import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { Image, List, Popup } from 'semantic-ui-react';
 import { Profile } from '../../../app/models/profile';
+import { useStore } from '../../../app/stores/store';
 import ProfileCard from '../../profiles/ProfileCard';
 
 interface Props {
@@ -9,6 +10,11 @@ interface Props {
 }
 
 const ActivityListItemAttendee = ({ attendees }: Props) => {
+	const {
+		commonStore: { assetImages },
+	} = useStore();
+
+	const userPlaceholder = assetImages.get('user');
 	return (
 		<List horizontal>
 			{attendees.map((attendee) => (
@@ -20,7 +26,7 @@ const ActivityListItemAttendee = ({ attendees }: Props) => {
 							<Image
 								size='mini'
 								circular
-								src={attendee.image || '/assets/images/user.png'}
+								src={attendee.image || userPlaceholder}
 								bordered
 								style={attendee.following ? followingStyle : null}
 							/>

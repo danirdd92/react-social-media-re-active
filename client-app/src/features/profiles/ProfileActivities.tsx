@@ -4,6 +4,7 @@ import React, { SyntheticEvent, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Grid, GridColumn, Header, Tab, TabProps, Image } from 'semantic-ui-react';
 import { Activity } from '../../app/models/activity';
+import { Category } from '../../app/models/category';
 import { useStore } from '../../app/stores/store';
 
 const panes = [
@@ -15,6 +16,7 @@ const panes = [
 const ProfileActivities = () => {
 	const {
 		profileStore: { profile, loadUserActivities, loadingActivities, userActivities },
+		commonStore: { categoryImages },
 	} = useStore();
 
 	useEffect(() => {
@@ -24,6 +26,7 @@ const ProfileActivities = () => {
 	const handleTabChange = (e: SyntheticEvent, data: TabProps) => {
 		loadUserActivities(profile!.userName, panes[data.activeIndex as number].pane.key);
 	};
+
 	return (
 		<Tab.Pane loading={loadingActivities}>
 			<Grid>
@@ -40,7 +43,7 @@ const ProfileActivities = () => {
 					<Card.Group itemsPerRow={4}>
 						{userActivities.map((activity) => (
 							<Card as={Link} to={`/activities/${activity.id}`} key={activity.id}>
-								<Image src={`/assets/images/categoryImages/${activity.category}.jpg`} style={imageStyle} />
+								<Image src={categoryImages.get(activity.category as Category)} style={imageStyle} />
 								<Card.Content>
 									<Card.Header textAlign='center'>{activity.titile}</Card.Header>
 									<Card.Meta textAlign='center'>

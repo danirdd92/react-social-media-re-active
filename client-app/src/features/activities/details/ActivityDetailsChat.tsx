@@ -2,8 +2,7 @@ import { Formik, Form, Field, FieldProps } from 'formik';
 import { observer } from 'mobx-react-lite';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Segment, Header, Comment, Button, Loader } from 'semantic-ui-react';
-import FormTextArea from '../../../app/common/form/FormTextArea';
+import { Segment, Header, Comment, Loader } from 'semantic-ui-react';
 import { useStore } from '../../../app/stores/store';
 import * as yup from 'yup';
 import { formatDistanceToNow } from 'date-fns';
@@ -13,7 +12,11 @@ interface Props {
 }
 
 const ActivityDetailsChat = ({ activityId }: Props) => {
-	const { commentStore } = useStore();
+	const {
+		commentStore,
+		commonStore: { assetImages },
+	} = useStore();
+
 	useEffect(() => {
 		if (activityId) {
 			commentStore.createHubConnection(activityId);
@@ -21,6 +24,8 @@ const ActivityDetailsChat = ({ activityId }: Props) => {
 
 		return () => commentStore.clearComments();
 	}, [commentStore, activityId]);
+
+	const userPlaceholder = assetImages.get('user');
 
 	return (
 		<>
@@ -60,7 +65,7 @@ const ActivityDetailsChat = ({ activityId }: Props) => {
 				<Comment.Group>
 					{commentStore.comments.map((comment) => (
 						<Comment key={comment.id}>
-							<Comment.Avatar src={comment.image || '/assets/images/user.png'} />
+							<Comment.Avatar src={comment.image || userPlaceholder} />
 							<Comment.Content>
 								<Comment.Author as={Link} to={`/profiles/${comment.userName}`}>
 									{comment.displayName}
@@ -83,23 +88,3 @@ export default observer(ActivityDetailsChat);
 const validationSchema = yup.object({
 	body: yup.string().required(),
 });
-
-const styles = {
-	field: {
-		position: 'relative',
-	},
-};
-
-{
-	/* <FormTextArea placeholder='Add comment' name='body' rows={2} />
-								<Button
-									loading={isSubmitting}
-									disabled={isSubmitting || !isValid}
-									content='Add Reply'
-									labelPosition='left'
-									icon='edit'
-									primary
-									type='submit'
-									floated='right'
-								/> */
-}

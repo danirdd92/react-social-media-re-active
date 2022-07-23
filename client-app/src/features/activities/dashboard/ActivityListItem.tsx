@@ -1,7 +1,9 @@
 import { format } from 'date-fns';
+import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { Item, Button, Segment, Icon, Label } from 'semantic-ui-react';
 import { Activity } from '../../../app/models/activity';
+import { useStore } from '../../../app/stores/store';
 import ActivityListItemAttendee from './ActivityListItemAttendee';
 
 interface Props {
@@ -9,6 +11,11 @@ interface Props {
 }
 
 const ActivityListItem = ({ activity }: Props) => {
+	const {
+		commonStore: { assetImages },
+	} = useStore();
+
+	const userPlaceholder = assetImages.get('user');
 	return (
 		<Segment.Group>
 			<Segment>
@@ -21,7 +28,7 @@ const ActivityListItem = ({ activity }: Props) => {
 							style={{ marginBottom: 5 }}
 							size='tiny'
 							circular
-							src={activity.host?.image || '/assets/images/user.png'}
+							src={activity.host?.image || userPlaceholder}
 						/>
 						<Item.Content>
 							<Item.Header as={Link} to={`/activities/${activity.id}`}>
@@ -66,4 +73,4 @@ const ActivityListItem = ({ activity }: Props) => {
 	);
 };
 
-export default ActivityListItem;
+export default observer(ActivityListItem);

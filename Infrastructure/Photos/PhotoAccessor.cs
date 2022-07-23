@@ -21,6 +21,12 @@ public class PhotoAccessor : IPhotoAccessor
         _cloudinary = new Cloudinary(account);
     }
 
+    public async Task<dynamic> GetImagesByTag(string tag)
+    {
+        return await _cloudinary.ListResourcesByTagAsync(tag);
+    }
+
+
     public async Task<PhotoUploadResult> AddPhoto(IFormFile file)
     {
         if (file.Length > 0)

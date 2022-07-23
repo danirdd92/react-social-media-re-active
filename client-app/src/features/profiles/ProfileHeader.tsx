@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { Button, Divider, Grid, Header, Item, Reveal, Segment, Statistic } from 'semantic-ui-react';
 import { Profile } from '../../app/models/profile';
+import { useStore } from '../../app/stores/store';
 import FollowButton from './FollowButton';
 
 interface Props {
@@ -8,13 +9,18 @@ interface Props {
 }
 
 const ProfileHeader = ({ profile }: Props) => {
+	const {
+		commonStore: { assetImages },
+	} = useStore();
+
+	const userPlaceHolder = assetImages.get('user');
 	return (
 		<Segment>
 			<Grid>
 				<Grid.Column width={12}>
 					<Item.Group>
 						<Item>
-							<Item.Image avatar size='small' src={profile.image || `/assets/images/user.png`} />
+							<Item.Image avatar size='small' src={profile.image || userPlaceHolder} />
 							<Item.Content verticalAlign='middle'>
 								<Header as='h1' content={profile.displayName} />
 							</Item.Content>

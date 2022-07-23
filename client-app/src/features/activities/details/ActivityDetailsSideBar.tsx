@@ -3,12 +3,19 @@ import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { Profile } from '../../../app/models/profile';
 import { Activity } from '../../../app/models/activity';
+import { useStore } from '../../../app/stores/store';
 
 interface Props {
 	activity: Activity;
 }
 
 const ActivityDetailsSideBar = ({ activity: { attendees, host } }: Props) => {
+	const {
+		commonStore: { assetImages },
+	} = useStore();
+
+	const userPlaceholder = assetImages.get('user');
+
 	if (!attendees) return null;
 
 	return (
@@ -26,7 +33,7 @@ const ActivityDetailsSideBar = ({ activity: { attendees, host } }: Props) => {
 								</Label>
 							)}
 
-							<Image size='tiny' src={attendee.image || '/assets/images/user.png'} />
+							<Image size='tiny' src={attendee.image || userPlaceholder} />
 							<Item.Content verticalAlign='middle'>
 								<Item.Header as='h3'>
 									<Link to={`/profiles/${attendee.userName}`}>{attendee.displayName}</Link>

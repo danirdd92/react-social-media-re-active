@@ -94,7 +94,7 @@ export default class ProfileStore {
 			});
 		} catch (error) {
 			runInAction(() => (this.loading = false));
-			console.log(error);
+			console.error(error);
 		}
 	};
 
@@ -126,7 +126,7 @@ export default class ProfileStore {
 				this.loading = false;
 			});
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			runInAction(() => (this.loading = false));
 		}
 	};

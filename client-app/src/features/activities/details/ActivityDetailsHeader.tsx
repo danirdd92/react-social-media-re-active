@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { Button, Header, Item, Segment, Image, Label } from 'semantic-ui-react';
 import { Activity } from '../../../app/models/activity';
+import { Category } from '../../../app/models/category';
 import { useStore } from '../../../app/stores/store';
 
 interface Props {
@@ -12,7 +13,10 @@ interface Props {
 const ActivityDetailsHeader = ({ activity }: Props) => {
 	const {
 		activityStore: { updateAttendance, loading, cancelActivityToggle },
+		commonStore: { categoryImages },
 	} = useStore();
+
+	const category = categoryImages.get(activity.category as Category);
 
 	return (
 		<Segment.Group>
@@ -25,7 +29,7 @@ const ActivityDetailsHeader = ({ activity }: Props) => {
 						content='Cancelled'
 					/>
 				)}
-				<Image src={`/assets/images/categoryImages/${activity.category}.jpg`} fluid style={activityImageStyle} />
+				<Image src={category} fluid style={activityImageStyle} />
 				<Segment style={activityImageTextStyle} basic>
 					<Item.Group>
 						<Item>

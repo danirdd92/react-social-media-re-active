@@ -122,10 +122,16 @@ const profiles = {
 		requests.get<UserActivity[]>(`/profiles/${userName}/activities?predicate=${predicate}`),
 };
 
+const common = {
+	getCategoryImages: () => requests.get<any>('/photos/category'),
+	getAssetImages: () => requests.get<any>('/photos/asset'),
+};
+
 const agent = {
 	activities,
 	account,
 	profiles,
+	common,
 };
 
 export default agent;

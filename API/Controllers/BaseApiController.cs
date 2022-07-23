@@ -11,11 +11,12 @@ namespace API.Controllers;
 public class BaseApiController : ControllerBase
 {
     private IMediator _madiator;
-
+    protected IConfiguration _config;
     protected IMediator Mediator => _madiator ??= HttpContext.RequestServices.GetService<IMediator>();
 
     protected ActionResult HandleResult<T>(Result<T> result)
     {
+
         if (result is null)
             return NotFound();
         if (result.IsSuccess && result.Value is not null)

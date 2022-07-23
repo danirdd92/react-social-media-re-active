@@ -6,13 +6,17 @@ import { useStore } from '../stores/store';
 const NavBar = () => {
 	const {
 		userStore: { user, logout },
+		commonStore: { assetImages },
 	} = useStore();
+
+	const logo = assetImages.get('logo');
+	const userPlaceholder = assetImages.get('user');
 	return (
 		<Menu inverted fixed='top'>
 			<Container>
 				<Menu.Item as={NavLink} to='/' exact header>
 					<img
-						src='/assets/images/logo.png'
+						src={logo}
 						alt='logo'
 						style={{
 							marginRight: '1.25rem',
@@ -23,15 +27,12 @@ const NavBar = () => {
 				<Menu.Item as={NavLink} to='/activities'>
 					Activities
 				</Menu.Item>
-				<Menu.Item as={NavLink} to='/errors'>
-					Errors
-				</Menu.Item>
 
 				<Menu.Item>
 					<Button as={NavLink} to='/createActivity' positive content='Create Activity' />
 				</Menu.Item>
 				<Menu.Item position='right'>
-					<Image src={user?.image || '/assets/images/user.png'} avatar spaced='right' />
+					<Image src={user?.image || userPlaceholder} avatar spaced='right' />
 					<Dropdown pointing='top left' text={user?.displayName}>
 						<Dropdown.Menu>
 							<Dropdown.Item as={Link} to={`/profiles/${user?.userName}`} text='My Profile' icon='user' />

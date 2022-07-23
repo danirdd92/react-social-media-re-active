@@ -24,11 +24,13 @@ function App() {
 	const { commonStore, userStore } = useStore();
 
 	useEffect(() => {
-		if (commonStore.token) {
-			userStore.getUser().finally(() => commonStore.setAppLoaded());
-		} else {
-			commonStore.setAppLoaded();
-		}
+		commonStore.getInitialAssets().then(() => {
+			if (commonStore.token) {
+				userStore.getUser().finally(() => commonStore.setAppLoaded());
+			} else {
+				commonStore.setAppLoaded();
+			}
+		});
 	}, [commonStore, userStore]);
 
 	if (!commonStore.appLoaded) return <Loader content='Loading app...' />;
